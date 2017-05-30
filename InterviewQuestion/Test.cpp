@@ -11,6 +11,6 @@ int main()
 {
 	//TestStackWithMin();
 	//TestCQueue();
-	TestCStack();
+	//TestCStack();
 	return 0;
 }
