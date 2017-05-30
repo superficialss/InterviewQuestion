@@ -10,6 +10,7 @@ using namespace std;
 int main()
 {
 	//TestStackWithMin();
-	TestCQueue();
+	//TestCQueue();
+	TestCStack();
 	return 0;
 }
