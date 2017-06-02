@@ -267,5 +267,150 @@ void TestCStack()
 
 
 // 一个数组实现两个栈
+//用数组的奇偶位实现两个栈
+class CTwoStackWithArr1
+{
+public:
+	CTwoStackWithArr1()
+		:_array(NULL)
+		, _index1(0)
+		, _index2(1)
+		,_capacity(0)
+	{}
 
+	void Push1(const int& x)
+	{
+		_CheckCapacity();
+		_array[_index1] = x;
+		_index1 += 2;
+	}
 
+	void Push2(const int& x)
+	{
+		_CheckCapacity();
+		_array[_index2] = x;
+		_index2 += 2;
+	}
+
+	void Pop1()
+	{
+		if (_index1 != 0)
+		{
+			_index1 -= 2;
+		}
+		else
+		{
+			cout << "The stack1 is empty!" << endl;
+			exit(1);
+		}
+	}
+
+	void Pop2()
+	{
+		if (_index2 != 1)
+		{
+			_index2 -= 2;
+		}
+		else
+		{
+			cout << "The stack2 is empty!" << endl;
+			exit(2);
+		}
+	}
+
+	int Top1()
+	{
+		assert(_index1 != 0);
+		return _array[_index1 - 2];
+	}
+
+	int Top2()
+	{
+		assert(_index2 != 1);
+		return _array[_index2 - 2];
+	}
+
+	int Size1()
+	{
+		return _index1 / 2;
+	}
+
+	int Size2()
+	{
+		return (_index2 - 1) / 2;
+	}
+
+	bool Empty1()
+	{
+		return !Size1();
+	}
+
+	bool Empty2()
+	{
+		return !Size2();
+	}
+
+	~CTwoStackWithArr1()
+	{
+		delete[] _array;
+	}
+
+protected:
+	void _CheckCapacity()
+	{
+		if (_index1 >= _capacity || _index2 >= _capacity)
+		{
+			int newcapacity = 2 * _capacity + 3;
+			int* newarray = new int[newcapacity];
+			
+			for (int i = 0; i < _index1; ++i)
+			{
+				newarray[i] = _array[i];     //拷贝偶数栈的数据
+			}
+
+			for (int i = 1; i < _index2; ++i)
+			{
+				newarray[i] = _array[i];          //拷贝奇数栈的数据
+			}
+
+			delete[] _array;
+			_capacity = newcapacity;
+			_array = newarray;
+		}
+	}
+protected:
+	int* _array;
+	int _index1;
+	int _index2;
+	int _capacity;
+};
+
+void TestCTwoStackWithArr1()
+{
+	CTwoStackWithArr1 s;
+	s.Push1(1);
+	s.Push1(2);
+	s.Push1(3);
+	s.Push1(4);
+
+	//偶栈
+	while (!s.Empty1())
+	{
+		cout << s.Top1() << " ";
+		s.Pop1();
+	}
+	cout << endl;
+
+	s.Push2(10);
+	s.Push2(9);
+	s.Push2(8);
+	s.Push2(7);
+
+	//奇栈
+	while (!s.Empty2())
+	{
+		cout << s.Top2() << " ";
+		s.Pop2();
+	}
+	cout << endl;
+}

@@ -12,5 +12,7 @@ int main()
 	//TestStackWithMin();
 	//TestCQueue();
 	//TestCStack();
+	TestCTwoStackWithArr1();
+
 	return 0;
 }
