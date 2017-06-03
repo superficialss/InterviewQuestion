@@ -414,3 +414,154 @@ void TestCTwoStackWithArr1()
 	}
 	cout << endl;
 }
+
+//将数组从中间分开，实现两个栈
+class CTwoStackWithArr2
+{
+public:
+	CTwoStackWithArr2()
+		:_array(NULL)
+		,_index1(0)
+		,_index2(0)
+		,_capacity(0)
+	{}
+
+	void Push1(const int& x)
+	{
+		_CheckCapacity();
+		_array[_index1] = x;
+		--_index1;
+	}
+
+	void Push2(const int& x)
+	{
+		_CheckCapacity();
+		_array[_index2] = x;
+		++_index2;
+	}
+
+	void Pop1()
+	{
+		if (_index1 < _capacity/2)
+		{
+			_index1++;
+		}
+		else
+		{
+			cout << "The stack1 is empty!" << endl;
+			exit(1);
+		}
+	}
+
+	void Pop2()
+	{
+		if (_index2 != _capacity/2)
+		{
+			_index2--;
+		}
+		else
+		{
+			cout << "The stack2 is empty!" << endl;
+			exit(2);
+		}
+	}
+
+	int Top1()
+	{
+		return _array[_index1 + 1];
+	}
+
+	int Top2()
+	{
+		return _array[_index2 - 1];
+	}
+
+	int Size1()
+	{
+		int mid = _capacity >> 1;
+		return mid - 1 - _index1;
+	}
+
+	int Size2()
+	{
+		int mid = _capacity >> 1;
+		return mid - _index2;
+	}
+
+	bool Empty1()
+	{
+		return !Size1();
+	}
+
+	bool Empty2()
+	{
+		return !Size2();
+	}
+
+	~CTwoStackWithArr2()
+	{
+		delete[] _array;
+	}
+
+protected:
+	void _CheckCapacity()
+	{
+		if (_index1 < 0 || _index2 == _capacity)
+		{
+			int newcapacity =  _capacity * 2 + 3;
+			int* newarray = new int[newcapacity];
+			int mid = _capacity / 2;
+			int NewMid = newcapacity / 2;
+
+			for (int i = mid; i >= 0 && _capacity > 0; --i)
+			{
+				newarray[NewMid--] = _array[i];
+			}
+
+			for (int i = mid; i < _capacity; ++i)
+			{
+				newarray[NewMid++] = _array[i];
+			}
+
+			delete[] _array;
+			_capacity = newcapacity;
+			_array = newarray;
+			_index1 = NewMid - (mid - _index1);
+			_index2 = NewMid + (_index2 - mid) + 1;
+		}
+	}
+
+protected:
+	int* _array;
+	int _index1;
+	int _index2;
+	int _capacity;
+};
+
+void TestCTwoStackWithArr2()
+{
+	CTwoStackWithArr2 s;
+	s.Push1(1);
+	s.Push1(2);
+	s.Push1(3);
+	s.Push1(4);
+
+	while (!s.Empty1())
+	{
+		cout << s.Top1() << " ";
+		s.Pop1();
+	}
+	cout << endl;
+
+	s.Push2(10);
+	s.Push2(9);
+	s.Push2(8);
+	s.Push2(7);
+
+	while (!s.Empty2())
+	{
+		cout << s.Top2() << " ";
+		s.Pop2();
+	}
+	cout << endl;
+}
